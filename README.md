@@ -37,7 +37,8 @@ GEMINI_MODEL=gemini-1.5-flash
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
-The backend includes deterministic fallback behavior for local demos when Gemini is not configured.
+The backend is Gemini-only for assessment generation and scoring paths. If Gemini is unavailable
+or misconfigured, the API returns clear errors instead of fallback-generated results.
 
 ## Run With Docker
 

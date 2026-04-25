@@ -130,6 +130,22 @@ label {
   line-height: 1.25;
 }
 
+.progress {
+  display: grid;
+  gap: 6px;
+}
+
+.progress span {
+  color: #46515f;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.progress progress {
+  width: 100%;
+  height: 10px;
+}
+
 .error {
   margin-bottom: 18px;
   border-left: 4px solid #b42318;

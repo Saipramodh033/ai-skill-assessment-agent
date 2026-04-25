@@ -7,6 +7,9 @@ Each evaluated skill receives:
 - Final score: `40% concept + 60% application`.
 - Confidence: low, medium, or high based on response quality and evidence strength.
 
+When a skill has multiple assessment questions, the skill-level report score is the average of
+per-question evaluation scores for that skill.
+
 Score bands:
 
 - 0-2: no usable evidence

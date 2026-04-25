@@ -13,7 +13,8 @@ export function ReportView({ report }: Props) {
         <p>{report.summary}</p>
         {report.llm_config && (
           <p className="muted">
-            AI source: {report.llm_config.gemini_api_key_configured ? "Gemini configured" : "Fallback mode"} · Model:{" "}
+            AI source: {report.llm_config.gemini_api_key_configured ? "Gemini configured" : "Gemini not configured"} ·
+            {" "}Model:{" "}
             {report.llm_config.gemini_model}
           </p>
         )}

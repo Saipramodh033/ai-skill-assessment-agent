@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field, model_validator
 
 
 class Evaluation(BaseModel):
+    question_id: str = ""
     skill_id: str = ""
     skill_name: str = ""
     concept_score: float = 0

@@ -2,15 +2,17 @@ from statistics import mean
 
 from app.models.session import SessionState
 from app.services.gemini_service import gemini_service
+from app.services.scoring_service import aggregate_evaluations_by_skill
 
 
 def generate_report(session: SessionState) -> dict:
-    scores = [evaluation.final_score for evaluation in session.evaluations]
+    aggregated_evaluations = aggregate_evaluations_by_skill(session.evaluations)
+    scores = [evaluation.final_score for evaluation in aggregated_evaluations]
     readiness = round(mean(scores) * 10) if scores else 0
     report = {
         "readiness_percent": readiness,
         "summary": _summary(readiness),
-        "skill_evaluation": [evaluation.model_dump() for evaluation in session.evaluations],
+        "skill_evaluation": [evaluation.model_dump() for evaluation in aggregated_evaluations],
         "key_gaps": [gap.model_dump() for gap in session.gaps],
         "learning_plan": [step.model_dump() for step in session.learning_plan],
         "final_recommendation": _recommendation(readiness),

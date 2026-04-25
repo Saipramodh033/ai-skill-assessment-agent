@@ -25,8 +25,10 @@ export default function App() {
   const [question, setQuestion] = useState<Question | null>(null);
   const [answer, setAnswer] = useState("");
   const [report, setReport] = useState<Report | null>(null);
+  const [answeredCount, setAnsweredCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const totalQuestions = Math.max((skills?.assessment_targets.length ?? 0) * 2, 2);
 
   async function run<T>(action: () => Promise<T>) {
     setLoading(true);
@@ -48,6 +50,7 @@ export default function App() {
     const extracted = await run(() => extractSkills(session.session_id));
     if (!extracted) return;
     setSkills(extracted);
+    setAnsweredCount(0);
     setStage("skills");
   }
 
@@ -63,6 +66,7 @@ export default function App() {
     if (!submitted) return;
     const evaluated = await run(() => evaluateAnswer(sessionId, question.question_id));
     if (!evaluated) return;
+    setAnsweredCount((count) => count + 1);
     setAnswer("");
     const next = await run(() => getNextQuestion(sessionId));
     if (next) {
@@ -127,6 +131,12 @@ export default function App() {
       {stage === "assessment" && question && (
         <section className="question-card">
           <p>{question.skill_name}</p>
+          <div className="progress">
+            <span>
+              Question {Math.min(answeredCount + 1, totalQuestions)} of {totalQuestions}
+            </span>
+            <progress max={totalQuestions} value={Math.min(answeredCount, totalQuestions)} />
+          </div>
           <h2>{question.question}</h2>
           <textarea
             value={answer}

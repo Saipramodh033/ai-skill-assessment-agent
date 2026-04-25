@@ -1,10 +1,12 @@
 from app.models.evaluation import Gap
 from app.models.session import SessionState
+from app.services.scoring_service import aggregate_evaluations_by_skill
 
 
 def identify_gaps(session: SessionState) -> list[Gap]:
     gaps: list[Gap] = []
-    for evaluation in session.evaluations:
+    aggregated = aggregate_evaluations_by_skill(session.evaluations)
+    for evaluation in aggregated:
         if evaluation.final_score < 5:
             severity = "high"
         elif evaluation.final_score < 7:

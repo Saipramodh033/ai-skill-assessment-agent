@@ -36,6 +36,7 @@ async def evaluate_answer(session: SessionState, question_id: str) -> Evaluation
         },
     )
     evaluation = Evaluation.model_validate(data)
+    evaluation.question_id = question_id
     if not evaluation.skill_id:
         evaluation.skill_id = question.skill_id
     if not evaluation.skill_name:
@@ -43,9 +44,7 @@ async def evaluate_answer(session: SessionState, question_id: str) -> Evaluation
     if not evaluation.evidence:
         evaluation.evidence = [answer.answer_id]
     session.ai_status["answer_evaluation"] = "gemini"
-
-    existing = [item for item in session.evaluations if item.skill_id != evaluation.skill_id]
-    session.evaluations = existing + [evaluation]
+    session.evaluations.append(evaluation)
     return evaluation
 
 
