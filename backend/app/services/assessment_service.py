@@ -3,13 +3,12 @@ from uuid import uuid4
 
 from app.models.question import Question
 from app.models.session import SessionState
+from app.core.config import get_settings
 from app.prompts.question_generation_prompt import QUESTION_GENERATION_PROMPT
 from app.services.gemini_service import gemini_service
 
 logger = logging.getLogger(__name__)
-
-QUESTIONS_PER_SKILL = 2
-TEST_SKILL_LIMIT = 1
+settings = get_settings()
 
 
 async def generate_next_question(session: SessionState) -> Question | None:
@@ -33,14 +32,14 @@ async def generate_next_question(session: SessionState) -> Question | None:
         session.session_id,
         target.name,
         question_number,
-        QUESTIONS_PER_SKILL,
+        settings.questions_per_skill,
     )
     data = await gemini_service.generate_json(
         QUESTION_GENERATION_PROMPT,
         {
             "skill": target.model_dump(),
             "question_number": question_number,
-            "questions_per_skill": QUESTIONS_PER_SKILL,
+            "questions_per_skill": settings.questions_per_skill,
             "job_description": session.job_description,
             "resume": session.resume,
             "required_skills": [
@@ -76,8 +75,8 @@ def _next_skill(session: SessionState):
     if not session.extracted_skills:
         return None
 
-    for skill in session.extracted_skills.assessment_targets[:TEST_SKILL_LIMIT]:
-        if _answered_count(session, skill.skill_id) < QUESTIONS_PER_SKILL:
+    for skill in session.extracted_skills.assessment_targets[: max(1, settings.assessment_skill_limit)]:
+        if _answered_count(session, skill.skill_id) < settings.questions_per_skill:
             return skill
     return None
 

@@ -1,5 +1,6 @@
 import json
 import logging
+import asyncio
 from typing import Any
 
 from app.core.config import get_settings
@@ -29,18 +30,39 @@ class GeminiService:
         if self._client is None:
             self._client = genai.Client(api_key=self.settings.gemini_api_key)
 
-        try:
-            response = self._client.models.generate_content(
-                model=self.settings.gemini_model,
-                contents=(
-                    f"{prompt}\n\n"
-                    "Return only valid JSON. Do not wrap the JSON in Markdown.\n\n"
-                    f"Payload:\n{json.dumps(payload, ensure_ascii=False)}"
-                ),
-            )
-        except Exception:
-            logger.exception("Gemini request failed model=%s", self.settings.gemini_model)
-            raise
+        max_attempts = max(1, self.settings.gemini_retry_attempts)
+        response = None
+        for attempt in range(1, max_attempts + 1):
+            try:
+                response = self._client.models.generate_content(
+                    model=self.settings.gemini_model,
+                    contents=(
+                        f"{prompt}\n\n"
+                        "Return only valid JSON. Do not wrap the JSON in Markdown.\n\n"
+                        f"Payload:\n{json.dumps(payload, ensure_ascii=False)}"
+                    ),
+                )
+                break
+            except Exception as exc:
+                is_retryable = _is_retryable_error(exc)
+                if attempt >= max_attempts or not is_retryable:
+                    logger.exception(
+                        "Gemini request failed model=%s attempt=%s/%s",
+                        self.settings.gemini_model,
+                        attempt,
+                        max_attempts,
+                    )
+                    raise
+                delay_seconds = (self.settings.gemini_retry_base_delay_ms * (2 ** (attempt - 1))) / 1000
+                logger.warning(
+                    "Gemini request retry model=%s attempt=%s/%s delay=%.2fs error=%s",
+                    self.settings.gemini_model,
+                    attempt,
+                    max_attempts,
+                    delay_seconds,
+                    exc,
+                )
+                await asyncio.sleep(delay_seconds)
 
         text = getattr(response, "text", "") or ""
         parsed = self._parse_json(text)
@@ -66,3 +88,9 @@ class GeminiService:
 
 
 gemini_service = GeminiService()
+
+
+def _is_retryable_error(exc: Exception) -> bool:
+    text = str(exc).upper()
+    retryable_markers = ["503", "UNAVAILABLE", "RESOURCE_EXHAUSTED", "429", "DEADLINE_EXCEEDED", "TIMEOUT"]
+    return any(marker in text for marker in retryable_markers)

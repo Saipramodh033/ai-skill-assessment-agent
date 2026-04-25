@@ -35,10 +35,16 @@ Copy `.env.example` to `.env` and set:
 GEMINI_API_KEY=your_gemini_api_key
 GEMINI_MODEL=gemini-1.5-flash
 VITE_API_BASE_URL=http://localhost:8000
+GEMINI_RETRY_ATTEMPTS=3
+GEMINI_RETRY_BASE_DELAY_MS=800
+ASSESSMENT_SKILL_LIMIT=1
+QUESTIONS_PER_SKILL=2
+SESSION_DB_PATH=data/sessions.db
 ```
 
 The backend is Gemini-only for assessment generation and scoring paths. If Gemini is unavailable
 or misconfigured, the API returns clear errors instead of fallback-generated results.
+Session data is persisted in SQLite at `SESSION_DB_PATH` so sessions survive backend restarts.
 
 ## Run With Docker
 
