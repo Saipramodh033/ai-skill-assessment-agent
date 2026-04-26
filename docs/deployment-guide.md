@@ -8,6 +8,11 @@ This guide will walk you through deploying SkillProbe completely for free using 
 
 We are using Render because their free tier allows native Python web services and background threads without complex serverless configurations.
 
+> **⚠️ CRITICAL NOTE REGARDING THE DATABASE:**
+> This prototype uses a local **SQLite** database (`data/sessions.db`) for storing session state. Because Render's Free Tier uses an **ephemeral filesystem**, your database will be wiped whenever the server goes to sleep (after 15 minutes of inactivity) or restarts. 
+> 
+> **For a hackathon prototype, this is completely fine** (it acts as automatic cleanup). However, you must complete an assessment in one sitting. If you step away for 20 minutes and come back, your session will be lost and you will get a 404 error. To fix this in production, you would upgrade to a Render Disk ($7/mo) or swap the SQLite store for a free cloud Postgres database like Supabase.
+
 1. **Sign up / Log in to Render**
    - Go to [render.com](https://render.com) and log in with your GitHub account.
 
