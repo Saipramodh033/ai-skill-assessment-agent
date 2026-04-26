@@ -185,10 +185,11 @@ export function ReportView({ report, onReset }: Props) {
 
   return (
     <section className="report-view" id="report">
-      {/* Hero */}
-      <div className="report-hero">
-        <div className="report-hero-left">
-          <ReadinessGauge percent={report.readiness_percent} size={200} />
+      {/* Hero Section */}
+      <div className="report-overview-grid">
+        <div className="overview-card readiness-card">
+          <h3 className="card-subtitle">Role Readiness</h3>
+          <ReadinessGauge percent={report.readiness_percent} size={220} />
           <div className="readiness-meta">
             <p className="readiness-summary">{report.summary}</p>
             {report.total_weeks_to_readiness && (
@@ -199,9 +200,13 @@ export function ReportView({ report, onReset }: Props) {
             )}
           </div>
         </div>
+
         {report.skill_evaluation.length >= 2 && (
-          <div className="report-hero-right">
-            <SkillRadar evaluations={report.skill_evaluation} size={280} />
+          <div className="overview-card radar-card">
+            <h3 className="card-subtitle">Skill Profile Overview</h3>
+            <div className="radar-container">
+              <SkillRadar evaluations={report.skill_evaluation} size={280} />
+            </div>
           </div>
         )}
       </div>

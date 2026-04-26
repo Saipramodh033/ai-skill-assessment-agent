@@ -72,6 +72,39 @@ body {
   margin-bottom: 2rem;
 }
 
+/* Error Banner */
+.error-banner {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  color: var(--danger);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.error-icon {
+  font-size: 1.25rem;
+}
+
+.error-dismiss {
+  margin-left: auto;
+  background: transparent;
+  color: var(--danger);
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.error-dismiss:hover {
+  background: rgba(248, 113, 113, 0.2);
+}
+
 .header-inner {
   display: flex;
   justify-content: space-between;
@@ -491,26 +524,54 @@ button:disabled {
   font-size: 0.875rem;
 }
 
-/* Report Stage */
-.report-hero {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4rem;
+/* Report Overview Grid */
+.report-overview-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
   margin: 3rem 0 4rem;
-  padding: 3rem;
-  background: linear-gradient(180deg, rgba(124, 58, 237, 0.05) 0%, transparent 100%);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
 }
 
-.report-hero-left {
+@media (min-width: 900px) {
+  .report-overview-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.overview-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
-  max-width: 400px;
-  text-align: center;
+  justify-content: flex-start;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.overview-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(124, 58, 237, 0.4);
+}
+
+.card-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-main);
+  margin-bottom: 2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+.radar-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .readiness-gauge {

@@ -8,13 +8,19 @@ SkillProbe is an AI-powered conversational agent that takes a Job Description an
 
 Built for the **AI-Powered Skill Assessment Hackathon**.
 
-## ✨ Key Features & Innovation
+## ✨ Implemented Core Agent Features & Innovation
 
-- **Adaptive Questioning:** The agent dynamically adjusts question difficulty and focus based on the candidate's previous answers. (e.g. If you nail a concept, it asks for a trade-off; if you stumble, it probes for an example).
-- **Gemini Contextual Gap Analysis:** Gaps aren't just a math formula. Gemini reasons about the candidate's answers vs the JD requirements to identify *genuine* readiness risks.
-- **Adjacent Skill Identification:** The agent automatically identifies skills the candidate is primed to learn based on their existing strengths (e.g., strong Docker knowledge → primed for Kubernetes).
-- **Actionable Learning Plans:** Generates sequenced steps with realistic time estimates and authentic, verified URLs to courses, books, and documentation.
-- **Premium UX:** Built with React & Vite, featuring dark glassmorphism styling, a custom SVG Skill Radar chart, and an animated Readiness Gauge.
+This prototype is a fully functioning implementation of the hackathon problem statement. Here is exactly what is working under the hood:
+
+- **True 3-Step Adaptive Questioning:** The backend orchestrates a strict 3-question sequence per skill. `Q1` tests foundational concepts. `Q2` dynamically reads the candidate's answer to Q1 and probes deeper (e.g., asking for edge cases if Q1 was strong, or concrete examples if weak). `Q3` tests cross-skill architectural integration.
+- **Strict Evaluative Scoring:** Every answer is passed to Gemini with a rigid prompt enforcing a 0-10 score split across two dimensions: **Concept (40% weight)** and **Application (60% weight)**, along with a confidence metric and directly quoted evidence from the candidate.
+- **Categorical Gap Analysis:** Gaps are strictly classified into three actionable types: 
+  1. `Failed Assessment` (assessed and scored < 7)
+  2. `Missing from Resume` (required by JD but totally absent in candidate history)
+  3. `Unassessed` (claimed, but skipped due to the 5-skill assessment limit).
+- **Adjacent Skill Generation (Innovation Criteria):** Based on the candidate's highest-scoring skills, the system identifies "Adjacent Skills"—growth paths that are *not* in the JD but realistically achievable based on their existing bridge skills (e.g., strong in Docker → primed for Kubernetes).
+- **Curated Learning Plans:** Generates sequenced steps addressing specific gaps or adjacent skills, with estimated weekly hours and realistic resource URLs mapped to the desired outcome.
+- **Zero Fallback AI Architecture:** The system relies 100% on Gemini `2.0-flash` with strict Pydantic model validation. If the LLM fails to reason, it raises a transparent 502 error rather than faking an assessment.
 
 ## 🏗 Architecture
 

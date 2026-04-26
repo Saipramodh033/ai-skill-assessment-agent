@@ -34,7 +34,8 @@ class GeminiService:
         response = None
         for attempt in range(1, max_attempts + 1):
             try:
-                response = self._client.models.generate_content(
+                response = await asyncio.to_thread(
+                    self._client.models.generate_content,
                     model=self.settings.gemini_model,
                     contents=(
                         f"{prompt}\n\n"

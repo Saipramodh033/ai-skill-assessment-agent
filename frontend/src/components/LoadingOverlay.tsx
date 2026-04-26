@@ -16,13 +16,17 @@ const STAGE_MESSAGES: Record<string, string> = {
 
 const TIPS = [
   "Tip: Depth of experience matters more than listing 50 frameworks on your resume.",
-  "Tip: When answering, structure your response using the STAR method (Situation, Task, Action, Result).",
-  "Tip: Admitting what you don't know but explaining how you'd figure it out is often a strong signal.",
-  "Tip: Interviewers look for how you handle trade-offs, not just whether you know the syntax.",
-  "Tip: 'Adjacent skills' are the easiest way to level up your career trajectory.",
-  "Tip: Highlight the business impact of your technical work on your resume.",
-  "Tip: A good system design answer considers failure modes and scalability limits.",
-  "Tip: Keep your resume concise—recruiters spend seconds scanning it before an interview.",
+  "Tip: When learning a new tool, focus on the 'Why' before the 'How'. Understanding the underlying problem it solves is key.",
+  "Tip: Admitting what you don't know but explaining how you'd figure it out is often a stronger signal than guessing.",
+  "Tip: Interviewers look for how you handle trade-offs and edge cases, not just whether you know the syntax.",
+  "Tip: 'Adjacent skills' are the easiest way to level up your career trajectory. Build on what you already know.",
+  "Tip: Highlight the business impact of your technical work on your resume, not just the tech stack.",
+  "Tip: A good system design answer considers failure modes, scalability limits, and data consistency.",
+  "Tip: Keep your resume concise—recruiters and engineers spend seconds scanning it before an interview.",
+  "Tip: Real-world engineering is about maintaining systems, not just building them. Mention debugging and observability.",
+  "Tip: The best way to learn a new language is to build a project you actually care about, rather than just following tutorials.",
+  "Tip: Code reviews are a critical soft skill. Showing you can give and receive constructive feedback is vital.",
+  "Tip: When stuck on a bug, explaining it out loud to a rubber duck (or an AI) often reveals the solution.",
 ];
 
 export function LoadingOverlay({ stage, message }: Props) {
@@ -38,7 +42,7 @@ export function LoadingOverlay({ stage, message }: Props) {
         setTipIndex((prev) => (prev + 1) % TIPS.length);
         setFade(true); // trigger fade in
       }, 300); // wait for CSS fade transition
-    }, 4000);
+    }, 8000);
     return () => clearInterval(interval);
   }, []);
 
