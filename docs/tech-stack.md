@@ -16,7 +16,7 @@ SkillProbe is built with a modern, decoupled stack designed for speed, reliabili
 - **State Persistence:** SQLite via `sqlite3` (using an embedded JSON document approach for `SessionState`).
 
 ## AI Intelligence Layer
-- **Model:** Gemini 2.0 Flash (`gemini-2.0-flash`)
+- **Model:** Gemini 2.5 Flash (`gemini-2.5-flash`)
 - **SDK:** `google-genai`
 - **Reasoning:** 100% LLM-driven logic. No hardcoded fallback paths or fake math formulas. If the AI cannot reason about a resume, it fails transparently.
 

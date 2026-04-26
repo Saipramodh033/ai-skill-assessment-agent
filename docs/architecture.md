@@ -1,6 +1,6 @@
 # SkillProbe Architecture
 
-SkillProbe is designed as a modern, decoupled web application. It relies entirely on **Gemini 2.0 Flash** for its reasoning capabilities, orchestrated by a robust **FastAPI** backend, and presented via a **React (Vite)** frontend.
+SkillProbe is designed as a modern, decoupled web application. It relies entirely on **Gemini 2.5 Flash** for its reasoning capabilities, orchestrated by a robust **FastAPI** backend, and presented via a **React (Vite)** frontend.
 
 ![Architecture Diagram](architecture-diagram.svg)
 

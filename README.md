@@ -20,7 +20,7 @@ This prototype is a fully functioning implementation of the hackathon problem st
   3. `Unassessed` (claimed, but skipped due to the 5-skill assessment limit).
 - **Adjacent Skill Generation (Innovation Criteria):** Based on the candidate's highest-scoring skills, the system identifies "Adjacent Skills"—growth paths that are *not* in the JD but realistically achievable based on their existing bridge skills (e.g., strong in Docker → primed for Kubernetes).
 - **Curated Learning Plans:** Generates sequenced steps addressing specific gaps or adjacent skills, with estimated weekly hours and realistic resource URLs mapped to the desired outcome.
-- **Zero Fallback AI Architecture:** The system relies 100% on Gemini `2.0-flash` with strict Pydantic model validation. If the LLM fails to reason, it raises a transparent 502 error rather than faking an assessment.
+- **Zero Fallback AI Architecture:** The system relies 100% on Gemini `2.5-flash` with strict Pydantic model validation. If the LLM fails to reason, it raises a transparent 502 error rather than faking an assessment.
 
 ## 🏗 Architecture
 
@@ -28,7 +28,7 @@ This prototype is a fully functioning implementation of the hackathon problem st
 
 - **Frontend:** React, Vite, TypeScript
 - **Backend:** Python, FastAPI, Pydantic
-- **AI Layer:** `google-genai` (Gemini 2.0 Flash)
+- **AI Layer:** `google-genai` (Gemini 2.5 Flash)
 - **Persistence:** SQLite (Session state storage)
 
 *See [Scoring Logic](docs/scoring-logic.md) for a detailed breakdown of how concept and application scores are weighted.*

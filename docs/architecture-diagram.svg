@@ -1,74 +1,148 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 850">
   <defs>
-    <style>
-      .bg { fill: #0a0a1a; }
-      .box { fill: rgba(255, 255, 255, 0.05); stroke: #7c3aed; stroke-width: 2px; rx: 8px; }
-      .box-db { fill: rgba(255, 255, 255, 0.05); stroke: #38bdf8; stroke-width: 2px; rx: 8px; }
-      .box-ai { fill: rgba(255, 255, 255, 0.05); stroke: #4ade80; stroke-width: 2px; rx: 8px; }
-      .text-title { fill: #f8fafc; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: bold; text-anchor: middle; }
-      .text-sub { fill: #94a3b8; font-family: 'Inter', sans-serif; font-size: 12px; text-anchor: middle; }
-      .line { stroke: #94a3b8; stroke-width: 2px; fill: none; stroke-dasharray: 4; }
-      .arrow { fill: #94a3b8; }
-      .label { fill: #a78bfa; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; text-anchor: middle; }
-    </style>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" class="arrow" />
+    <!-- Background Gradient -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+
+    <!-- Node Gradients -->
+    <linearGradient id="ui-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="be-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="ai-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#6d28d9" />
+    </linearGradient>
+    <linearGradient id="db-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+
+    <!-- Arrow Marker -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
     </marker>
   </defs>
 
-  <rect width="900" height="600" class="bg" />
+  <!-- Global Styles -->
+  <style>
+    .text-title { fill: #f8fafc; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; text-anchor: middle; }
+    .text-sub { fill: #cbd5e1; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; text-anchor: middle; }
+    .text-tiny { fill: #94a3b8; font-family: 'Inter', sans-serif; font-size: 10px; font-style: italic; text-anchor: middle; }
+    .label { fill: #94a3b8; font-family: 'Inter', sans-serif; font-size: 12px; text-anchor: middle; font-weight: 600; }
+    .line { stroke: #94a3b8; stroke-width: 2; fill: none; marker-end: url(#arrow); stroke-dasharray: 4; }
+    .solid-line { stroke: #94a3b8; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+    .box { rx: 8; stroke: #334155; stroke-width: 1; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
+  </style>
 
-  <!-- Title -->
-  <text x="450" y="40" fill="#f8fafc" font-family="Inter" font-size="24" font-weight="bold" text-anchor="middle">SkillProbe Architecture</text>
+  <!-- Background -->
+  <rect width="1000" height="850" fill="url(#bg)" />
 
-  <!-- User / Frontend -->
-  <rect x="50" y="100" width="200" height="400" class="box" />
-  <text x="150" y="140" class="text-title">React Frontend (Vite)</text>
-  <text x="150" y="160" class="text-sub">UI & State Management</text>
-  <text x="150" y="220" class="text-sub">- JD / Resume Input</text>
-  <text x="150" y="260" class="text-sub">- Adaptive Questionnaire</text>
-  <text x="150" y="300" class="text-sub">- Readiness Gauge & Radar</text>
-  <text x="150" y="340" class="text-sub">- Learning Plan View</text>
+  <!-- Main Title -->
+  <text x="500" y="40" fill="#f8fafc" font-family="Inter" font-size="28" font-weight="bold" text-anchor="middle">SkillProbe Architecture &amp; Assessment Workflow</text>
+  <text x="500" y="65" fill="#94a3b8" font-family="Inter" font-size="14" text-anchor="middle">Zero-Fallback AI Architecture powered by Gemini 2.5 Flash</text>
 
-  <!-- Backend -->
-  <rect x="350" y="100" width="200" height="400" class="box" />
-  <text x="450" y="140" class="text-title">FastAPI Backend</text>
-  <text x="450" y="160" class="text-sub">Python Application</text>
-  <text x="450" y="220" class="text-sub">1. Skill Extraction</text>
-  <text x="450" y="260" class="text-sub">2. Question Generation</text>
-  <text x="450" y="300" class="text-sub">3. Answer Evaluation</text>
-  <text x="450" y="340" class="text-sub">4. Gap Analysis</text>
-  <text x="450" y="380" class="text-sub">5. Learning Plan Builder</text>
+  <!-- ======================== -->
+  <!-- PHASE 1: INITIALIZATION  -->
+  <!-- ======================== -->
+  <rect x="50" y="100" width="900" height="150" fill="rgba(255,255,255,0.02)" rx="8" stroke="#334155" stroke-dasharray="5,5" />
+  <text x="70" y="130" fill="#94a3b8" font-family="Inter" font-size="14" font-weight="bold">Phase 1: Initialization &amp; Context Extraction</text>
 
-  <!-- Database -->
-  <rect x="650" y="100" width="200" height="150" class="box-db" />
-  <text x="750" y="140" class="text-title">SQLite Database</text>
-  <text x="750" y="160" class="text-sub">Local Storage</text>
-  <text x="750" y="200" class="text-sub">Persists SessionState:</text>
-  <text x="750" y="220" class="text-sub">Scores, Answers, Gaps</text>
+  <!-- React UI Upload -->
+  <rect x="80" y="150" width="180" height="70" fill="url(#ui-grad)" class="box" />
+  <text x="170" y="180" class="text-title">React UI</text>
+  <text x="170" y="200" class="text-sub">Submits JD &amp; Resume</text>
 
-  <!-- AI -->
-  <rect x="650" y="350" width="200" height="150" class="box-ai" />
-  <text x="750" y="390" class="text-title">Gemini API</text>
-  <text x="750" y="410" class="text-sub">google-genai</text>
-  <text x="750" y="450" class="text-sub">LLM Inference</text>
-  <text x="750" y="470" class="text-sub">(JSON Mode & Retries)</text>
+  <!-- FastAPI Backend -->
+  <rect x="340" y="150" width="180" height="70" fill="url(#be-grad)" class="box" />
+  <text x="430" y="180" class="text-title">FastAPI Backend</text>
+  <text x="430" y="200" class="text-sub">Creates SessionState</text>
 
-  <!-- Arrows -->
-  <!-- FE to BE -->
-  <path d="M 250 200 L 340 200" class="line" marker-end="url(#arrowhead)" />
-  <text x="300" y="190" class="label">HTTP POST</text>
-  <path d="M 350 250 L 260 250" class="line" marker-end="url(#arrowhead)" />
-  <text x="300" y="240" class="label">JSON Response</text>
+  <!-- Gemini Skill Extractor -->
+  <rect x="600" y="150" width="280" height="70" fill="url(#ai-grad)" class="box" />
+  <text x="740" y="180" class="text-title">Gemini: Skill Aggregation</text>
+  <text x="740" y="200" class="text-sub">Groups tools &amp; selects target skills</text>
 
-  <!-- BE to DB -->
-  <path d="M 550 175 L 640 175" class="line" marker-end="url(#arrowhead)" />
-  <path d="M 650 200 L 560 200" class="line" marker-end="url(#arrowhead)" />
-  <text x="600" y="165" class="label">State Sync</text>
+  <!-- Phase 1 Arrows -->
+  <path d="M 260 185 L 330 185" class="solid-line" />
+  <path d="M 520 185 L 590 185" class="solid-line" />
 
-  <!-- BE to AI -->
-  <path d="M 550 400 L 640 400" class="line" marker-end="url(#arrowhead)" />
-  <path d="M 650 450 L 560 450" class="line" marker-end="url(#arrowhead)" />
-  <text x="600" y="390" class="label">Prompts</text>
-  <text x="600" y="440" class="label">Structured JSON</text>
+  <!-- ======================== -->
+  <!-- PHASE 2: ADAPTIVE LOOP   -->
+  <!-- ======================== -->
+  <rect x="50" y="280" width="900" height="220" fill="rgba(255,255,255,0.02)" rx="8" stroke="#334155" stroke-dasharray="5,5" />
+  <text x="70" y="310" fill="#94a3b8" font-family="Inter" font-size="14" font-weight="bold">Phase 2: The Adaptive Assessment Loop</text>
+
+  <!-- Question Generation -->
+  <rect x="80" y="340" width="200" height="90" fill="url(#ai-grad)" class="box" />
+  <text x="180" y="370" class="text-title">Gemini: Q-Gen</text>
+  <text x="180" y="390" class="text-sub">Q1: Foundational</text>
+  <text x="180" y="410" class="text-sub">Next Q: Adapts to Answer</text>
+
+  <!-- User Answering -->
+  <rect x="340" y="340" width="180" height="90" fill="url(#ui-grad)" class="box" />
+  <text x="430" y="380" class="text-title">User Reacts</text>
+  <text x="430" y="400" class="text-sub">Answers Question</text>
+
+  <!-- Strict Evaluator -->
+  <rect x="580" y="340" width="280" height="90" fill="url(#ai-grad)" class="box" />
+  <text x="720" y="370" class="text-title">Gemini: Strict Evaluation</text>
+  <text x="720" y="390" class="text-sub">Scores Concept (40%) &amp; App (60%)</text>
+  <text x="720" y="410" class="text-tiny">Extracts direct quotes as evidence</text>
+
+  <!-- SQLite DB Tracking -->
+  <rect x="340" y="460" width="180" height="40" fill="url(#db-grad)" class="box" />
+  <text x="430" y="485" class="text-title">SQLite (Session Log)</text>
+
+  <!-- Phase 2 Arrows -->
+  <path d="M 280 385 L 330 385" class="solid-line" />
+  <text x="310" y="375" class="label">Ask</text>
+  <path d="M 520 385 L 570 385" class="solid-line" />
+  <text x="545" y="375" class="label">Submit</text>
+  
+  <!-- Loop Arrow back to Q-Gen -->
+  <path d="M 720 430 L 720 520 L 180 520 L 180 430" class="line" />
+  <text x="430" y="515" class="label" fill="#f8fafc" font-size="13">Saves to DB &amp; Loops per skill</text>
+
+  <!-- ======================== -->
+  <!-- PHASE 3: REPORTING       -->
+  <!-- ======================== -->
+  <rect x="50" y="550" width="900" height="280" fill="rgba(255,255,255,0.02)" rx="8" stroke="#334155" stroke-dasharray="5,5" />
+  <text x="70" y="580" fill="#94a3b8" font-family="Inter" font-size="14" font-weight="bold">Phase 3: Contextual Gap Analysis &amp; Learning Plan</text>
+
+  <!-- Gap Analysis -->
+  <rect x="80" y="610" width="250" height="90" fill="url(#ai-grad)" class="box" />
+  <text x="205" y="640" class="text-title">Gemini: Gap Analysis</text>
+  <text x="205" y="660" class="text-sub">Classifies Gaps (Failed/Missing)</text>
+  <text x="205" y="680" class="text-sub">Identifies "Adjacent Skills"</text>
+
+  <!-- Learning Plan -->
+  <rect x="380" y="610" width="250" height="90" fill="url(#ai-grad)" class="box" />
+  <text x="505" y="640" class="text-title">Gemini: Learning Plan</text>
+  <text x="505" y="660" class="text-sub">Maps gaps to actionable steps</text>
+  <text x="505" y="680" class="text-sub">Curates real-world URLs</text>
+
+  <!-- Final Report UI -->
+  <rect x="680" y="610" width="200" height="90" fill="url(#ui-grad)" class="box" />
+  <text x="780" y="640" class="text-title">Final Report UI</text>
+  <text x="780" y="660" class="text-sub">Radar Chart &amp; Readiness</text>
+  <text x="780" y="680" class="text-sub">PDF Export available</text>
+
+  <!-- Phase 3 Arrows -->
+  <path d="M 330 655 L 370 655" class="solid-line" />
+  <path d="M 630 655 L 670 655" class="solid-line" />
+
+  <!-- Transition Arrow from P2 to P3 -->
+  <path d="M 860 385 L 920 385 L 920 535 L 205 535 L 205 600" class="line" />
+  <text x="650" y="530" class="label" fill="#fde047">After assessment, aggregates data into Gap Analysis</text>
+
+  <!-- Free Tier Disclaimer -->
+  <text x="500" y="820" fill="#ef4444" font-family="Inter" font-size="12" font-style="italic" text-anchor="middle">* Note: For testing purposes and due to free-tier API limitations, the live demo is restricted to assessing 1 skill with 2 questions.</text>
+
 </svg>

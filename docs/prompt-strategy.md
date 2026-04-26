@@ -1,6 +1,6 @@
 # Prompt Engineering Strategy
 
-SkillProbe uses **Gemini 2.0 Flash** for its speed, massive context window, and robust JSON mode. To achieve reliable reasoning, our prompt strategy revolves around strict constraints, context injection, and structured output.
+SkillProbe uses **Gemini 2.5 Flash** for its speed, massive context window, and robust JSON mode. To achieve reliable reasoning, our prompt strategy revolves around strict constraints, context injection, and structured output.
 
 ## 1. Skill Extraction & Aggregation (`skill_extraction_prompt.py`)
 - **Challenge:** Resumes often list dozens of micro-skills (e.g., "S3", "EC2", "Lambda" alongside "Codeforces", "LeetCode"). This overwhelms the assessment limit.
