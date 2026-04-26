@@ -5,7 +5,7 @@ from threading import Lock
 from uuid import uuid4
 
 from app.core.config import get_settings
-from app.models.session import SessionState
+from app.models.session import SessionState, SessionSummary
 
 
 class SessionStore:
@@ -62,6 +62,58 @@ class SessionStore:
             )
             self._conn.commit()
         return session
+
+    def list_summaries(self) -> list[SessionSummary]:
+        rows = self._conn.execute(
+            """
+            SELECT session_id, payload, updated_at
+            FROM sessions
+            ORDER BY updated_at DESC, rowid DESC
+            """
+        ).fetchall()
+        summaries: list[SessionSummary] = []
+        for session_id, payload, updated_at in rows:
+            session = SessionState.model_validate(json.loads(payload))
+            title = _build_session_title(session.job_description, session.resume)
+            readiness_percent = _extract_readiness_percent(session)
+            status = "completed" if readiness_percent is not None else "in_progress"
+            summaries.append(
+                SessionSummary(
+                    session_id=session_id,
+                    title=title,
+                    readiness_percent=readiness_percent,
+                    last_updated=updated_at,
+                    status=status,
+                )
+            )
+        return summaries
+
+    def delete(self, session_id: str) -> None:
+        with self._lock:
+            cursor = self._conn.execute(
+                "DELETE FROM sessions WHERE session_id = ?",
+                (session_id,),
+            )
+            self._conn.commit()
+        if cursor.rowcount == 0:
+            raise KeyError(f"Session not found: {session_id}")
+
+
+def _build_session_title(job_description: str, resume: str) -> str:
+    for candidate in (job_description, resume):
+        text = " ".join(candidate.split())
+        if text:
+            return text[:72] + ("..." if len(text) > 72 else "")
+    return "Untitled assessment"
+
+
+def _extract_readiness_percent(session: SessionState) -> int | None:
+    value = session.final_report.get("readiness_percent") if isinstance(session.final_report, dict) else None
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        return round(value)
+    return None
 
 
 session_store = SessionStore()

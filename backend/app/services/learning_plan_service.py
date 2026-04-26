@@ -14,6 +14,8 @@ async def generate_learning_plan(session: SessionState) -> list[LearningStep]:
         {"gaps": [gap.model_dump() for gap in session.gaps], "role": session.job_description},
     )
     steps = [LearningStep.model_validate(item) for item in data]
+    for index, step in enumerate(steps, start=1):
+        step.step = index
     session.ai_status["learning_plan"] = "gemini"
 
     session.learning_plan = steps

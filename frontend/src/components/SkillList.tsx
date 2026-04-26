@@ -6,14 +6,18 @@ type Props = {
 };
 
 export function SkillList({ title, skills }: Props) {
+  const visibleSkills = skills.slice(0, 12);
+  const hiddenCount = Math.max(skills.length - visibleSkills.length, 0);
+
   return (
     <section className="panel">
       <h2>{title}</h2>
       {skills.length === 0 ? (
         <p className="muted">No skills detected yet.</p>
       ) : (
-        <ul className="skill-list">
-          {skills.map((skill) => (
+        <>
+        <ul className="skill-list skill-list-scroll">
+          {visibleSkills.map((skill) => (
             <li key={`${title}-${skill.skill_id}`}>
               <strong>{skill.name}</strong>
               <span>{skill.category}</span>
@@ -21,6 +25,8 @@ export function SkillList({ title, skills }: Props) {
             </li>
           ))}
         </ul>
+        {hiddenCount > 0 && <p className="muted">+ {hiddenCount} more skills</p>}
+        </>
       )}
     </section>
   );

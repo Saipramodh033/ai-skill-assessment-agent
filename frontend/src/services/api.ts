@@ -1,4 +1,4 @@
-import type { Question, Report, SkillExtractionResult } from "../types/api";
+import type { Question, Report, SessionState, SessionSummary, SkillExtractionResult } from "../types/api";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 
@@ -24,6 +24,18 @@ export async function createSession(jobDescription: string, resume: string) {
     method: "POST",
     body: JSON.stringify({ job_description: jobDescription, resume }),
   });
+}
+
+export async function listSessions() {
+  return request<SessionSummary[]>("/sessions");
+}
+
+export async function getSession(sessionId: string) {
+  return request<SessionState>(`/sessions/${sessionId}`);
+}
+
+export async function deleteSession(sessionId: string) {
+  return request<void>(`/sessions/${sessionId}`, { method: "DELETE" });
 }
 
 export async function extractSkills(sessionId: string) {

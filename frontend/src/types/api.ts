@@ -65,3 +65,21 @@ export type Report = {
     gemini_model: string;
   };
 };
+
+export type SessionSummary = {
+  session_id: string;
+  title: string;
+  readiness_percent: number | null;
+  last_updated: string;
+  status: "completed" | "in_progress";
+};
+
+export type SessionState = {
+  session_id: string;
+  job_description: string;
+  resume: string;
+  extracted_skills: SkillExtractionResult | null;
+  questions: Question[];
+  answers: Array<{ question_id: string }>;
+  final_report: Record<string, unknown>;
+};

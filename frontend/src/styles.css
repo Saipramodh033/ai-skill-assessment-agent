@@ -62,6 +62,10 @@ button:disabled {
   opacity: 0.55;
 }
 
+button.danger {
+  background: #b42318;
+}
+
 textarea {
   width: 100%;
   min-height: 260px;
@@ -114,6 +118,12 @@ label {
   margin-bottom: 12px;
 }
 
+.skill-list-scroll {
+  max-height: 320px;
+  overflow: auto;
+  margin-bottom: 10px;
+}
+
 .skill-list span,
 .skill-list small,
 .muted {
@@ -158,6 +168,58 @@ label {
 .report {
   display: grid;
   gap: 20px;
+}
+
+.history-panel {
+  margin-bottom: 18px;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.history-list {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.history-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid #d9dee6;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.history-controls {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.history-controls input,
+.history-controls select {
+  border: 1px solid #ccd3dc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+  background: white;
+  color: #17202a;
+}
+
+.history-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .readiness strong {
@@ -215,5 +277,14 @@ th {
   .input-grid,
   .skills-grid {
     grid-template-columns: 1fr;
+  }
+
+  .history-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .history-list li {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

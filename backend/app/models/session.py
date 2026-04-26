@@ -11,6 +11,14 @@ class SessionCreate(BaseModel):
     resume: str
 
 
+class SessionSummary(BaseModel):
+    session_id: str
+    title: str
+    readiness_percent: int | None = None
+    last_updated: str
+    status: str
+
+
 class SessionState(BaseModel):
     session_id: str
     job_description: str
