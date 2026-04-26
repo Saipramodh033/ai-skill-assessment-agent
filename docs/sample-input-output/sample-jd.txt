@@ -1,0 +1,20 @@
+Role: Senior Backend Engineer
+
+About the Role:
+We are looking for a Senior Backend Engineer to join our core infrastructure team. You will be responsible for designing, building, and scaling our high-throughput microservices architecture. Our systems process millions of events per day, so performance, reliability, and observability are critical.
+
+Responsibilities:
+- Design, build, and maintain scalable APIs and backend services using Python (FastAPI/Django) and Go.
+- Architect and optimise PostgreSQL database schemas for high volume transactional data.
+- Build event-driven architectures using Apache Kafka or RabbitMQ.
+- Containerise applications using Docker and manage deployments on Kubernetes (EKS).
+- Implement robust CI/CD pipelines using GitHub Actions.
+- Ensure system observability using Prometheus, Grafana, and Datadog.
+
+Requirements:
+- 5+ years of software engineering experience focusing on backend systems.
+- Strong proficiency in Python and solid understanding of modern web frameworks (FastAPI preferred).
+- Deep experience with relational databases, particularly PostgreSQL, including performance tuning and complex queries.
+- Experience with container orchestration (Kubernetes) in a cloud environment (AWS).
+- Hands-on experience with message brokers and event-driven patterns.
+- Passion for writing clean, testable, and maintainable code.

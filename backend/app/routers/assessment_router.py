@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.core.session_store import session_store
 from app.models.answer import AnswerCreate, AnswerRecord
-from app.models.evaluation import Evaluation, Gap, LearningStep
+from app.models.evaluation import AdjacentSkill, Evaluation, Gap, LearningStep
 from app.models.question import Question
 from app.models.skill import SkillExtractionResult
 from app.services.assessment_service import generate_next_question
@@ -20,9 +20,9 @@ async def extract_session_skills(session_id: str) -> SkillExtractionResult:
     try:
         result = await extract_skills(session)
     except Exception as exc:
-        session.ai_status["skill_extraction"] = f"gemini_error: {exc}"
+        session.ai_status["skill_extraction"] = f"error: {exc}"
         session_store.save(session)
-        raise HTTPException(status_code=502, detail=f"Gemini skill extraction failed: {exc}") from exc
+        raise HTTPException(status_code=502, detail=f"Skill extraction failed: {exc}") from exc
     session_store.save(session)
     return result
 
@@ -45,9 +45,9 @@ async def next_question(session_id: str) -> Question | None:
     try:
         question = await generate_next_question(session)
     except Exception as exc:
-        session.ai_status["question_generation"] = f"gemini_error: {exc}"
+        session.ai_status["question_generation"] = f"error: {exc}"
         session_store.save(session)
-        raise HTTPException(status_code=502, detail=f"Gemini question generation failed: {exc}") from exc
+        raise HTTPException(status_code=502, detail=f"Question generation failed: {exc}") from exc
     session_store.save(session)
     return question
 
@@ -71,32 +71,45 @@ async def evaluate_question(session_id: str, question_id: str) -> Evaluation:
     except StopIteration as exc:
         raise HTTPException(status_code=404, detail="Question or answer not found.") from exc
     except Exception as exc:
-        session.ai_status["answer_evaluation"] = f"gemini_error: {exc}"
+        session.ai_status["answer_evaluation"] = f"error: {exc}"
         session_store.save(session)
-        raise HTTPException(status_code=502, detail=f"Gemini answer evaluation failed: {exc}") from exc
+        raise HTTPException(status_code=502, detail=f"Answer evaluation failed: {exc}") from exc
     session_store.save(session)
     return evaluation
 
 
-@router.post("/gaps", response_model=list[Gap])
-def gaps(session_id: str) -> list[Gap]:
+@router.post("/gaps", response_model=dict)
+async def gaps(session_id: str) -> dict:
     session = _get_session(session_id)
-    result = identify_gaps(session)
+    try:
+        identified_gaps, adjacent_skills = await identify_gaps(session)
+    except Exception as exc:
+        session.ai_status["gap_analysis"] = f"error: {exc}"
+        session_store.save(session)
+        raise HTTPException(status_code=502, detail=f"Gap analysis failed: {exc}") from exc
     session_store.save(session)
-    return result
+    return {
+        "gaps": [g.model_dump() for g in identified_gaps],
+        "adjacent_skills": [a.model_dump() for a in adjacent_skills],
+    }
 
 
 @router.post("/learning-plan", response_model=list[LearningStep])
 async def learning_plan(session_id: str) -> list[LearningStep]:
     session = _get_session(session_id)
     if not session.gaps:
-        identify_gaps(session)
+        try:
+            await identify_gaps(session)
+        except Exception as exc:
+            session.ai_status["gap_analysis"] = f"error: {exc}"
+            session_store.save(session)
+            raise HTTPException(status_code=502, detail=f"Gap analysis failed: {exc}") from exc
     try:
         result = await generate_learning_plan(session)
     except Exception as exc:
-        session.ai_status["learning_plan"] = f"gemini_error: {exc}"
+        session.ai_status["learning_plan"] = f"error: {exc}"
         session_store.save(session)
-        raise HTTPException(status_code=502, detail=f"Gemini learning plan generation failed: {exc}") from exc
+        raise HTTPException(status_code=502, detail=f"Learning plan generation failed: {exc}") from exc
     session_store.save(session)
     return result
 

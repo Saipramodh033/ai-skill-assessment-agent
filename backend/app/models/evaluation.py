@@ -63,16 +63,76 @@ class Evaluation(BaseModel):
 
 class Gap(BaseModel):
     skill: str
-    severity: str
+    severity: str  # "high" | "medium" | "unassessed"
+    gap_type: str = "failed_assessment"  # "failed_assessment" | "missing_from_resume" | "unassessed"
     reason: str
+    role_criticality: str = "medium"  # "critical" | "high" | "medium" | "low"
+
+
+class AdjacentSkill(BaseModel):
+    """A skill the candidate can realistically acquire given their existing background."""
+    skill: str
+    rationale: str
+    acquisition_difficulty: str  # "easy" | "medium" | "hard"
+    estimated_weeks: int
+    why_adjacent: str = ""  # What existing skill makes this achievable
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_llm_fields(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        normalized = dict(data)
+        normalized["acquisition_difficulty"] = _normalize_difficulty(
+            normalized.get("acquisition_difficulty", normalized.get("difficulty", "medium"))
+        )
+        normalized["estimated_weeks"] = _to_int(
+            normalized.get("estimated_weeks", normalized.get("weeks", normalized.get("duration_weeks", 4)))
+        )
+        normalized["why_adjacent"] = normalized.get(
+            "why_adjacent",
+            normalized.get("rationale_for_adjacency", normalized.get("bridge", "")),
+        )
+        return normalized
+
+
+class Resource(BaseModel):
+    """A curated learning resource with a verified URL."""
+    title: str
+    url: str
+    resource_type: str  # "course" | "book" | "docs" | "video" | "article"
+    free: bool = True
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_llm_fields(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        normalized = dict(data)
+        # Normalize type field aliases
+        normalized["resource_type"] = normalized.get(
+            "resource_type",
+            normalized.get("type", normalized.get("format", "article")),
+        )
+        normalized["resource_type"] = _normalize_resource_type(normalized.get("resource_type", "article"))
+        # Normalize free/paid field aliases
+        free_val = normalized.get("free", normalized.get("is_free", normalized.get("cost", True)))
+        if isinstance(free_val, str):
+            normalized["free"] = free_val.strip().lower() in {"true", "free", "yes", "0", "$0"}
+        else:
+            normalized["free"] = bool(free_val)
+        return normalized
 
 
 class LearningStep(BaseModel):
     step: int
     focus: str = ""
+    skill_gap: str = ""          # which gap this step addresses
     time_estimate: str = ""
-    resources: list[str] = Field(default_factory=list)
+    weekly_hours: int = 4
+    resources: list[Resource] = Field(default_factory=list)
     outcome: str = ""
+    is_adjacent_skill: bool = False
 
     @model_validator(mode="before")
     @classmethod
@@ -85,17 +145,33 @@ class LearningStep(BaseModel):
             normalized.get("step", normalized.get("step_id", normalized.get("id")))
         )
         normalized["focus"] = normalized.get("focus", normalized.get("topic", normalized.get("title", "")))
+        normalized["skill_gap"] = normalized.get(
+            "skill_gap",
+            normalized.get("addresses_gap", normalized.get("gap", normalized.get("skill", ""))),
+        )
         normalized["time_estimate"] = normalized.get(
             "time_estimate",
             normalized.get("duration", normalized.get("estimated_time", "")),
         )
+        normalized["weekly_hours"] = _to_int(
+            normalized.get("weekly_hours", normalized.get("hours_per_week", normalized.get("hours", 4)))
+        )
         normalized["outcome"] = normalized.get(
             "outcome",
-            normalized.get("expected_outcome", normalized.get("goal", "")),
+            normalized.get("expected_outcome", normalized.get("goal", normalized.get("milestone", ""))),
         )
-        normalized["resources"] = _normalize_resources(normalized.get("resources", []))
+        is_adj = normalized.get("is_adjacent_skill", normalized.get("adjacent", normalized.get("is_adjacent", False)))
+        normalized["is_adjacent_skill"] = bool(is_adj)
+
+        # Normalize resources — accept list of dicts or list of strings
+        raw_resources = normalized.get("resources", [])
+        normalized["resources"] = _normalize_resource_list(raw_resources)
         return normalized
 
+
+# ---------------------------------------------------------------------------
+# Normalization helpers
+# ---------------------------------------------------------------------------
 
 def _normalize_confidence(raw: Any) -> str:
     if isinstance(raw, str):
@@ -108,7 +184,6 @@ def _normalize_confidence(raw: Any) -> str:
             return "low"
 
     if isinstance(raw, (int, float)):
-        # Accept 0-10 numeric confidence from LLM output and map it.
         if raw >= 7:
             return "high"
         if raw >= 4:
@@ -116,6 +191,39 @@ def _normalize_confidence(raw: Any) -> str:
         return "low"
 
     return "low"
+
+
+def _normalize_difficulty(raw: Any) -> str:
+    if isinstance(raw, str):
+        lowered = raw.strip().lower()
+        if lowered in {"easy", "medium", "hard"}:
+            return lowered
+    return "medium"
+
+
+def _normalize_resource_type(raw: Any) -> str:
+    if isinstance(raw, str):
+        lowered = raw.strip().lower()
+        mapping = {
+            "course": "course",
+            "online course": "course",
+            "mooc": "course",
+            "book": "book",
+            "textbook": "book",
+            "docs": "docs",
+            "documentation": "docs",
+            "reference": "docs",
+            "video": "video",
+            "tutorial": "video",
+            "youtube": "video",
+            "article": "article",
+            "blog": "article",
+            "guide": "article",
+        }
+        for key, value in mapping.items():
+            if key in lowered:
+                return value
+    return "article"
 
 
 def _normalize_justification(raw: Any) -> str:
@@ -172,19 +280,38 @@ def _normalize_step_value(raw: Any) -> int:
     return 1
 
 
-def _normalize_resources(raw: Any) -> list[str]:
+def _to_int(raw: Any) -> int:
+    if isinstance(raw, bool):
+        return 1
+    if isinstance(raw, int):
+        return raw
+    if isinstance(raw, float):
+        return int(raw)
+    if isinstance(raw, str):
+        text = raw.strip()
+        try:
+            return int(float(text))
+        except ValueError:
+            return 4
+    return 4
+
+
+def _normalize_resource_list(raw: Any) -> list[dict]:
+    """Accept list[dict], list[str], or a single dict/str and return list[dict]."""
     if isinstance(raw, list):
-        items = [_stringify_value(item) for item in raw]
-        return [item for item in items if item]
+        normalized: list[dict] = []
+        for item in raw:
+            if isinstance(item, dict):
+                normalized.append(item)
+            elif isinstance(item, str) and item.strip():
+                # Plain string resource — wrap it so the Resource model can validate
+                normalized.append({"title": item, "url": "", "resource_type": "article", "free": True})
+        return normalized
     if isinstance(raw, dict):
-        items = []
-        for key, value in raw.items():
-            text = _stringify_value(value)
-            if text:
-                items.append(f"{key}: {text}")
-        return items
-    text = _stringify_value(raw)
-    return [text] if text else []
+        return [raw]
+    if isinstance(raw, str) and raw.strip():
+        return [{"title": raw, "url": "", "resource_type": "article", "free": True}]
+    return []
 
 
 def _to_float(raw: Any) -> float:

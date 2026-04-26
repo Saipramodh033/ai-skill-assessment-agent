@@ -41,15 +41,35 @@ export type Evaluation = {
 export type Gap = {
   skill: string;
   severity: string;
+  gap_type: string;
   reason: string;
+  role_criticality: string;
+};
+
+export type AdjacentSkill = {
+  skill: string;
+  rationale: string;
+  acquisition_difficulty: string;
+  estimated_weeks: number;
+  why_adjacent: string;
+};
+
+export type Resource = {
+  title: string;
+  url: string;
+  resource_type: string;
+  free: boolean;
 };
 
 export type LearningStep = {
   step: number;
   focus: string;
+  skill_gap: string;
   time_estimate: string;
-  resources: string[];
+  weekly_hours: number;
+  resources: Resource[];
   outcome: string;
+  is_adjacent_skill: boolean;
 };
 
 export type Report = {
@@ -57,7 +77,9 @@ export type Report = {
   summary: string;
   skill_evaluation: Evaluation[];
   key_gaps: Gap[];
+  adjacent_skills: AdjacentSkill[];
   learning_plan: LearningStep[];
+  total_weeks_to_readiness: number | null;
   final_recommendation: string;
   ai_status?: Record<string, string>;
   llm_config?: {

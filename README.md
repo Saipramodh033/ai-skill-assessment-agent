@@ -1,98 +1,64 @@
-# AI Skill Assessment Agent
+# SkillProbe: AI Skill Assessment & Learning Plan Agent
 
-An AI-powered skill assessment and personalized learning plan agent. The system compares a job description with a candidate resume, conducts a guided assessment, evaluates answers, identifies true gaps, and generates a structured learning plan.
+![SkillProbe Demo UI Placeholder](docs/architecture-diagram.svg)
 
-## Tech Stack
+**A resume tells you what someone claims to know — not how well they actually know it.**
 
-- Frontend: React, Vite, TypeScript
-- Backend: Python, FastAPI, Pydantic
-- AI layer: Gemini API using `google-genai`
-- Containerization: Docker and Docker Compose
-- Testing: pytest
+SkillProbe is an AI-powered conversational agent that takes a Job Description and a candidate's resume, conducts an adaptive technical assessment on real required skills, identifies genuine gaps, and generates a personalised, resource-backed learning plan. 
 
-## Project Structure
+Built for the **AI-Powered Skill Assessment Hackathon**.
 
-```text
-backend/
-  app/
-    core/
-    models/
-    prompts/
-    routers/
-    services/
-  tests/
-frontend/
-  src/
-docs/
-docker-compose.yml
-```
+## ✨ Key Features & Innovation
 
-## Environment
+- **Adaptive Questioning:** The agent dynamically adjusts question difficulty and focus based on the candidate's previous answers. (e.g. If you nail a concept, it asks for a trade-off; if you stumble, it probes for an example).
+- **Gemini Contextual Gap Analysis:** Gaps aren't just a math formula. Gemini reasons about the candidate's answers vs the JD requirements to identify *genuine* readiness risks.
+- **Adjacent Skill Identification:** The agent automatically identifies skills the candidate is primed to learn based on their existing strengths (e.g., strong Docker knowledge → primed for Kubernetes).
+- **Actionable Learning Plans:** Generates sequenced steps with realistic time estimates and authentic, verified URLs to courses, books, and documentation.
+- **Premium UX:** Built with React & Vite, featuring dark glassmorphism styling, a custom SVG Skill Radar chart, and an animated Readiness Gauge.
 
-Copy `.env.example` to `.env` and set:
+## 🏗 Architecture
 
-```env
-GEMINI_API_KEY=your_gemini_api_key
-GEMINI_MODEL=gemini-1.5-flash
-VITE_API_BASE_URL=http://localhost:8000
-GEMINI_RETRY_ATTEMPTS=3
-GEMINI_RETRY_BASE_DELAY_MS=800
-ASSESSMENT_SKILL_LIMIT=1
-QUESTIONS_PER_SKILL=2
-SESSION_DB_PATH=data/sessions.db
-```
+![Architecture](docs/architecture-diagram.svg)
 
-The backend is Gemini-only for assessment generation and scoring paths. If Gemini is unavailable
-or misconfigured, the API returns clear errors instead of fallback-generated results.
-Session data is persisted in SQLite at `SESSION_DB_PATH` so sessions survive backend restarts.
+- **Frontend:** React, Vite, TypeScript
+- **Backend:** Python, FastAPI, Pydantic
+- **AI Layer:** `google-genai` (Gemini 2.0 Flash)
+- **Persistence:** SQLite (Session state storage)
 
-## Run With Docker
+*See [Scoring Logic](docs/scoring-logic.md) for a detailed breakdown of how concept and application scores are weighted.*
+
+## 🚀 Quick Start (Local Setup)
+
+The easiest way to run the stack is using Docker Compose.
 
 ```bash
+# Clone the repository
+git clone https://github.com/Saipramodh033/ai-skill-assessment-agent.git
+cd ai-skill-assessment-agent
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env and insert your GEMINI_API_KEY
+
+# Boot the application
 docker compose up --build
 ```
 
-Open:
+- **Frontend UI:** `http://localhost:5173`
+- **Backend API Docs:** `http://localhost:8000/docs`
 
-- Frontend: http://localhost:5173
-- Backend API docs: http://localhost:8000/docs
+## 📁 Sample Inputs & Outputs
 
-## Run Locally
+If you want to test the agent with realistic data, check the `docs/sample-input-output/` folder:
+- [Sample Job Description](docs/sample-input-output/sample-jd.txt)
+- [Sample Candidate Resume](docs/sample-input-output/sample-resume.txt)
+- [Expected JSON Report Output](docs/sample-input-output/sample-report.json)
 
-Backend:
+## 🌐 Live Deployment
 
-```bash
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload
-```
+*(Placeholder: Vercel & Render URLs will be added here via PR-6)*
+- Frontend: `https://skillprobe.vercel.app`
+- Backend: `https://skillprobe-api.onrender.com`
 
-Frontend:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-## API Endpoints
-
-```text
-POST /sessions
-POST /sessions/{session_id}/extract-skills
-POST /sessions/{session_id}/assessment-plan
-GET  /sessions/{session_id}/next-question
-POST /sessions/{session_id}/answers
-POST /sessions/{session_id}/evaluate/{question_id}
-POST /sessions/{session_id}/gaps
-POST /sessions/{session_id}/learning-plan
-GET  /sessions/{session_id}/report
-```
-
-## GitHub Workflow
-
-- `main`: stable/demo-ready
-- `dev`: integration
-- `feature/*`: module work
-
-Use pull requests for merging. Keep commits small and meaningful.
+## 📄 License
+MIT License

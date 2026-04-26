@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #0a0a1a; }
+      .box { fill: rgba(255, 255, 255, 0.05); stroke: #7c3aed; stroke-width: 2px; rx: 8px; }
+      .box-db { fill: rgba(255, 255, 255, 0.05); stroke: #38bdf8; stroke-width: 2px; rx: 8px; }
+      .box-ai { fill: rgba(255, 255, 255, 0.05); stroke: #4ade80; stroke-width: 2px; rx: 8px; }
+      .text-title { fill: #f8fafc; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: bold; text-anchor: middle; }
+      .text-sub { fill: #94a3b8; font-family: 'Inter', sans-serif; font-size: 12px; text-anchor: middle; }
+      .line { stroke: #94a3b8; stroke-width: 2px; fill: none; stroke-dasharray: 4; }
+      .arrow { fill: #94a3b8; }
+      .label { fill: #a78bfa; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow" />
+    </marker>
+  </defs>
+
+  <rect width="900" height="600" class="bg" />
+
+  <!-- Title -->
+  <text x="450" y="40" fill="#f8fafc" font-family="Inter" font-size="24" font-weight="bold" text-anchor="middle">SkillProbe Architecture</text>
+
+  <!-- User / Frontend -->
+  <rect x="50" y="100" width="200" height="400" class="box" />
+  <text x="150" y="140" class="text-title">React Frontend (Vite)</text>
+  <text x="150" y="160" class="text-sub">UI & State Management</text>
+  <text x="150" y="220" class="text-sub">- JD / Resume Input</text>
+  <text x="150" y="260" class="text-sub">- Adaptive Questionnaire</text>
+  <text x="150" y="300" class="text-sub">- Readiness Gauge & Radar</text>
+  <text x="150" y="340" class="text-sub">- Learning Plan View</text>
+
+  <!-- Backend -->
+  <rect x="350" y="100" width="200" height="400" class="box" />
+  <text x="450" y="140" class="text-title">FastAPI Backend</text>
+  <text x="450" y="160" class="text-sub">Python Application</text>
+  <text x="450" y="220" class="text-sub">1. Skill Extraction</text>
+  <text x="450" y="260" class="text-sub">2. Question Generation</text>
+  <text x="450" y="300" class="text-sub">3. Answer Evaluation</text>
+  <text x="450" y="340" class="text-sub">4. Gap Analysis</text>
+  <text x="450" y="380" class="text-sub">5. Learning Plan Builder</text>
+
+  <!-- Database -->
+  <rect x="650" y="100" width="200" height="150" class="box-db" />
+  <text x="750" y="140" class="text-title">SQLite Database</text>
+  <text x="750" y="160" class="text-sub">Local Storage</text>
+  <text x="750" y="200" class="text-sub">Persists SessionState:</text>
+  <text x="750" y="220" class="text-sub">Scores, Answers, Gaps</text>
+
+  <!-- AI -->
+  <rect x="650" y="350" width="200" height="150" class="box-ai" />
+  <text x="750" y="390" class="text-title">Gemini API</text>
+  <text x="750" y="410" class="text-sub">google-genai</text>
+  <text x="750" y="450" class="text-sub">LLM Inference</text>
+  <text x="750" y="470" class="text-sub">(JSON Mode & Retries)</text>
+
+  <!-- Arrows -->
+  <!-- FE to BE -->
+  <path d="M 250 200 L 340 200" class="line" marker-end="url(#arrowhead)" />
+  <text x="300" y="190" class="label">HTTP POST</text>
+  <path d="M 350 250 L 260 250" class="line" marker-end="url(#arrowhead)" />
+  <text x="300" y="240" class="label">JSON Response</text>
+
+  <!-- BE to DB -->
+  <path d="M 550 175 L 640 175" class="line" marker-end="url(#arrowhead)" />
+  <path d="M 650 200 L 560 200" class="line" marker-end="url(#arrowhead)" />
+  <text x="600" y="165" class="label">State Sync</text>
+
+  <!-- BE to AI -->
+  <path d="M 550 400 L 640 400" class="line" marker-end="url(#arrowhead)" />
+  <path d="M 650 450 L 560 450" class="line" marker-end="url(#arrowhead)" />
+  <text x="600" y="390" class="label">Prompts</text>
+  <text x="600" y="440" class="label">Structured JSON</text>
+</svg>

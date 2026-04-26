@@ -1,0 +1,103 @@
+{
+  "readiness_percent": 62,
+  "summary": "Candidate shows solid foundations with specific gaps that are addressable within a structured learning plan.",
+  "skill_evaluation": [
+    {
+      "skill_id": "target_1a2b3c",
+      "skill_name": "Python / FastAPI",
+      "concept_score": 8.5,
+      "application_score": 7.0,
+      "final_score": 7.6,
+      "confidence": "high",
+      "justification": "Demonstrates strong understanding of Python and REST APIs. Lacks deep production experience specifically with FastAPI but understands the core concepts.",
+      "evidence": ["built RESTful APIs", "FastAPI is async by default"]
+    },
+    {
+      "skill_id": "target_4d5e6f",
+      "skill_name": "PostgreSQL Performance",
+      "concept_score": 8.0,
+      "application_score": 8.5,
+      "final_score": 8.3,
+      "confidence": "high",
+      "justification": "Candidate clearly articulated how to use EXPLAIN ANALYZE and implement partial indexes. Real-world experience reducing latency is evident.",
+      "evidence": ["reduced latency by 25%", "used partial B-tree indexing"]
+    },
+    {
+      "skill_id": "target_7g8h9i",
+      "skill_name": "Kubernetes (EKS)",
+      "concept_score": 4.0,
+      "application_score": 2.0,
+      "final_score": 2.8,
+      "confidence": "high",
+      "justification": "Candidate knows Docker but has no practical experience with Kubernetes or container orchestration at scale. Failed to explain Pods or Deployments.",
+      "evidence": ["haven't used EKS directly", "I mostly use raw Docker containers"]
+    }
+  ],
+  "key_gaps": [
+    {
+      "skill": "Kubernetes (EKS)",
+      "severity": "high",
+      "reason": "Scored 2.8/10. Role requires deploying and managing services on Kubernetes, but candidate only has single-node Docker experience.",
+      "role_criticality": "critical"
+    },
+    {
+      "skill": "Event-Driven Architecture (Kafka)",
+      "severity": "high",
+      "reason": "Skill missing entirely from resume and candidate struggled to explain pub/sub mechanics during assessment.",
+      "role_criticality": "high"
+    }
+  ],
+  "adjacent_skills": [
+    {
+      "skill": "Kubernetes Fundamentals",
+      "rationale": "Essential for modern backend deployment and directly required by the JD.",
+      "acquisition_difficulty": "medium",
+      "estimated_weeks": 4,
+      "why_adjacent": "Candidate already has strong Docker experience; Kubernetes is the natural next step."
+    }
+  ],
+  "learning_plan": [
+    {
+      "step": 1,
+      "focus": "Kubernetes Architecture & Pods",
+      "skill_gap": "Kubernetes (EKS)",
+      "time_estimate": "2 weeks at 6h/week",
+      "weekly_hours": 6,
+      "is_adjacent_skill": true,
+      "outcome": "Can deploy a simple multi-container application to a local Minikube cluster.",
+      "resources": [
+        {
+          "title": "Kubernetes for Beginners",
+          "url": "https://kubernetes.io/docs/tutorials/kubernetes-basics/",
+          "resource_type": "docs",
+          "free": true
+        },
+        {
+          "title": "TechWorld with Nana: Kubernetes Crash Course",
+          "url": "https://www.youtube.com/watch?v=X48VuDVv0do",
+          "resource_type": "video",
+          "free": true
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "focus": "Kafka Pub/Sub Patterns",
+      "skill_gap": "Event-Driven Architecture (Kafka)",
+      "time_estimate": "3 weeks at 5h/week",
+      "weekly_hours": 5,
+      "is_adjacent_skill": false,
+      "outcome": "Can build a simple producer/consumer system in Python processing 10k messages/sec.",
+      "resources": [
+        {
+          "title": "Confluent Developer: Kafka Tutorials",
+          "url": "https://developer.confluent.io/",
+          "resource_type": "course",
+          "free": true
+        }
+      ]
+    }
+  ],
+  "total_weeks_to_readiness": 5,
+  "final_recommendation": "Use the learning plan to close priority gaps. Reassess in 4-8 weeks with a targeted technical challenge focusing on Kubernetes and Event-driven systems."
+}

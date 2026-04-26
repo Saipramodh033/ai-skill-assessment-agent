@@ -1,0 +1,25 @@
+JANE DOE
+Backend Software Engineer
+jane.doe@email.com | github.com/janedoe
+
+PROFESSIONAL EXPERIENCE
+
+Software Engineer | TechCorp Inc. (2020 - Present)
+- Developed and maintained multiple RESTful APIs using Python and Django, serving 50k+ daily active users.
+- Migrated legacy monolithic services into a microservices architecture, improving deployment speed by 40%.
+- Designed and optimized database schemas in PostgreSQL, reducing average query latency by 25%.
+- Integrated Redis for caching frequently accessed user data, decreasing database load.
+- Wrote comprehensive unit and integration tests using pytest, achieving 85% code coverage.
+- Deployed services using Docker containers and managed CI/CD pipelines via Jenkins.
+
+Junior Developer | StartUp LLC (2018 - 2020)
+- Assisted in building a data processing pipeline using Python scripts.
+- Handled basic server maintenance and deployments on AWS EC2.
+- Created internal dashboard tools using basic HTML/CSS and Flask.
+- Collaborated with front-end developers to integrate APIs.
+
+SKILLS
+Languages: Python, JavaScript, SQL
+Frameworks: Django, Flask, FastAPI (learning)
+Databases: PostgreSQL, MySQL, Redis
+Tools: Docker, Git, Jenkins, AWS (EC2, S3)

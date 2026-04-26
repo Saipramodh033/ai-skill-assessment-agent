@@ -26,7 +26,12 @@ async def generate_next_question(session: SessionState) -> Question | None:
         )
         return existing_unanswered
 
-    question_number = _answered_count(session, target.skill_id) + 1
+    answered_count = _answered_count(session, target.skill_id)
+    question_number = answered_count + 1
+
+    # Collect per-skill evaluations so Q2/Q3 can reference scores from prior answers
+    skill_evaluations = [e.model_dump(mode="json") for e in session.evaluations if e.skill_id == target.skill_id]
+
     logger.info(
         "Question generation using Gemini session_id=%s skill=%s question_number=%s/%s",
         session.session_id,
@@ -54,8 +59,13 @@ async def generate_next_question(session: SessionState) -> Question | None:
                 skill.model_dump()
                 for skill in (session.extracted_skills.overlap_skills if session.extracted_skills else [])
             ],
-            "previous_questions": [q.model_dump() for q in session.questions],
-            "previous_answers": [a.model_dump(mode="json") for a in session.answers],
+            "previous_questions": [q.model_dump() for q in session.questions if q.skill_id == target.skill_id],
+            "previous_answers": [
+                a.model_dump(mode="json")
+                for a in session.answers
+                if any(q.skill_id == target.skill_id and q.question_id == a.question_id for q in session.questions)
+            ],
+            "skill_evaluations": skill_evaluations,
         },
     )
     question = Question.model_validate(data)
